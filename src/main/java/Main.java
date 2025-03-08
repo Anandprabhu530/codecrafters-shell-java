@@ -8,7 +8,7 @@ public class Main {
             String input = scanner.nextLine();
             String[] tempArray = input.split(" ");
             if (tempArray[0].equals("exit")) {
-                System.out.println(tempArray[0] + " " + tempArray[1]);
+                System.exit(0);
             } else {
                 System.out.println(input + ": command not found");
             }
