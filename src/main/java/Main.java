@@ -9,6 +9,15 @@ public class Main {
             String[] tempArray = input.split(" ");
             if (tempArray[0].equals("exit")) {
                 System.exit(0);
+            } else if (tempArray[0].equals("echo")) {
+                for (int i = 1; i < tempArray.length; i++) {
+                    if (i == tempArray.length - 1) {
+                        System.out.print(tempArray[i]);
+                    } else {
+                        System.out.print(tempArray[i] + " ");
+                    }
+                }
+                System.out.println();
             } else {
                 System.out.println(input + ": command not found");
             }
