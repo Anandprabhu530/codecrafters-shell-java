@@ -6,7 +6,13 @@ public class Main {
         while (true) {
             System.out.print("$ ");
             String input = scanner.nextLine();
-            System.out.println(input + ": command not found");
+            String[] tempArray = input.split(" ");
+            if (tempArray[0].equals("exit")) {
+                System.out.println(tempArray[0] + " " + tempArray[1]);
+                System.exit(0);
+            } else {
+                System.out.println(input + ": command not found");
+            }
         }
     }
 }
