@@ -62,7 +62,7 @@ public class Main {
                     String path = getPath(command);
                     if (path != null) {
                         String fullPath = path + input.substring(command.length());
-                        System.out.print(fullPath);
+                        System.out.print(input);
                         Process p = Runtime.getRuntime().exec(fullPath.split(" "));
                         p.getInputStream().transferTo(System.out);
                     } else {
