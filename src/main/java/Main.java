@@ -64,7 +64,7 @@ public class Main {
                         System.out.println("Program was passed 2 args (including program name).");
                         System.out.println("Arg #0 (program name): " + command);
                         System.out.println("Arg #1: " + commands[1]);
-                        System.out.println("Program Signature: 5998595441");
+                        System.out.println("Program Signature: " + System.getProperty(command));
                     } else {
                         System.out.println(input + ": command not found");
                     }
