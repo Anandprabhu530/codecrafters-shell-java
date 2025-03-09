@@ -61,10 +61,9 @@ public class Main {
                 default:
                     String path = getPath(command);
                     if (path != null) {
-                        System.out.println("Program was passed 2 args (including program name).");
-                        System.out.println("Arg #0 (program name): " + command);
-                        System.out.println("Arg #1: " + commands[1]);
-                        System.out.println("Program Signature: " + System.getProperty(command));
+                        String fullPath = path + params;
+                        Process p = Runtime.getRuntime().exec(fullPath.split(" "));
+                        p.getInputStream().transferTo(System.out);
                     } else {
                         System.out.println(input + ": command not found");
                     }
