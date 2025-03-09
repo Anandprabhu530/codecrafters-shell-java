@@ -14,19 +14,21 @@ public class Main {
             } else if (input.startsWith("echo")) {
                 System.out.println(input.substring(5));
             } else if (input.startsWith("type")) {
-                if (input.substring(5).equals("echo")) {
+                String command = input.substring(5);
+                if (command.equals("echo")) {
                     System.out.println("echo is a shell builtin");
-                } else if (input.substring(5).equals("exit")) {
+                } else if (command.equals("exit")) {
                     System.out.println("exit is a shell builtin");
-                } else if (input.substring(5).equals("type")) {
+                } else if (command.equals("type")) {
                     System.out.println("type is a shell builtin");
                 } else {
                     if (index < availablePath.length) {
                         System.out.println(
-                                input.substring(5) + " is " + availablePath[index++] + "/" + input.substring(5));
+                                command + " is " + availablePath[index++] + "/" + command);
                     } else {
-                        System.out.println(input.substring(5) + ": not found");
+                        System.out.println(command + ": not found");
                     }
+                    System.out.println(path);
                 }
             } else {
                 System.out.println(input + ": command not found");
