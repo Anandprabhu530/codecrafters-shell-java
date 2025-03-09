@@ -62,6 +62,7 @@ public class Main {
                     String path = getPath(command);
                     if (path != null) {
                         String[] fullPath = new String[] { command, params };
+                        System.out.print(fullPath);
                         Process process = Runtime.getRuntime().exec(fullPath);
                         process.getInputStream().transferTo(System.out);
                     } else {
