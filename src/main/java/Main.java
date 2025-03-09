@@ -5,7 +5,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String path = System.getenv("PATH");
         String[] availablePath = path.split(":");
-        int index = 0;
+        int index = 1;
         while (true) {
             System.out.print("$ ");
             String input = scanner.nextLine();
