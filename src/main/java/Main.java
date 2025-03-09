@@ -2,11 +2,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String[] test = args;
-        System.out.println(test.length);
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("$ ");
+            String path = System.getenv("PATH");
+            System.out.println(path);
             String input = scanner.nextLine();
             if (input.startsWith("exit")) {
                 System.exit(0);
