@@ -61,12 +61,11 @@ public class Main {
                 default:
                     String path = getPath(command);
                     if (path != null) {
-                        String fullPath = path + input.substring(command.length());
-                        Process p = Runtime.getRuntime().exec(fullPath.split(" "));
-                        System.out.print(p.getInputStream());
-                        // p.getInputStream().transferTo(System.out);
+                        String[] fullPath = new String[] { command, params };
+                        Process process = Runtime.getRuntime().exec(fullPath);
+                        process.getInputStream().transferTo(System.out);
                     } else {
-                        System.out.println(input + ": command not found");
+                        System.out.println(command + ": command not found");
                     }
                     break;
             }
