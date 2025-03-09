@@ -2,6 +2,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        String test = args[0];
+        System.out.println(test);
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("$ ");
