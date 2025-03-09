@@ -60,13 +60,12 @@ public class Main {
 
                 default:
                     String path = getPath(command);
-                    if (path != null) {
+                    if (path == null) {
+                        System.out.printf("%s: command not found%n", command);
+                    } else {
                         String fullPath = path + input.substring(command.length());
-                        System.out.print(input);
                         Process p = Runtime.getRuntime().exec(fullPath.split(" "));
                         p.getInputStream().transferTo(System.out);
-                    } else {
-                        System.out.println(input + ": command not found");
                     }
                     break;
             }
