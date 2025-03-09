@@ -61,7 +61,7 @@ public class Main {
                 default:
                     String path = getPath(command);
                     if (path != null) {
-                        String fullPath = path + params;
+                        String fullPath = path + input.substring(command.length());
                         Process p = Runtime.getRuntime().exec(fullPath.split(" "));
                         p.getInputStream().transferTo(System.out);
                     } else {
