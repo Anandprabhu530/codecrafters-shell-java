@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        String path = System.getenv("PATH");
+        String path = System.getenv("$PATH");
         String[] availablePath = path.split(":");
         int index = 1;
         while (true) {
