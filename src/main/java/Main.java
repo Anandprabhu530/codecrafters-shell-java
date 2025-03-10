@@ -60,7 +60,7 @@ public class Main {
                         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                             String line;
                             while ((line = reader.readLine()) != null) {
-                                System.out.print(line);
+                                System.out.println(line);
                             }
                         }
                     }
