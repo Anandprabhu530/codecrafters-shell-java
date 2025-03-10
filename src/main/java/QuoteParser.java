@@ -19,7 +19,6 @@ public class QuoteParser {
 
     public void echoQuoteProcessor(String spliChar, String params) {
         String[] content = params.split(spliChar);
-        System.out.println(Arrays.toString(content));
         for (int i = 1; i < content.length; i += 2) {
             if (content[i - 1].length() == 0) {
                 System.out.print(content[i]);
