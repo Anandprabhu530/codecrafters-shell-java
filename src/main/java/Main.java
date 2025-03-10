@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -12,7 +11,7 @@ public class Main {
         builtInCommands.add("echo");
         builtInCommands.add("exit");
         builtInCommands.add("type");
-
+        QuoteParser quoteParser = new QuoteParser();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("$ ");
@@ -46,30 +45,20 @@ public class Main {
 
                 case "echo":
                     if (params.charAt(0) == '\'') {
-                        params = params.replaceAll("'+", "");
-                        System.out.println(params);
+                        quoteParser.echoQuoteProcessor("'", params);
                     } else if (params.charAt(0) == '"') {
-                        String[] dm = params.split("\"");
-                        System.out.println(Arrays.toString(dm));
-                        params = params.replaceAll("\"+", "");
-                        System.out.println(params);
+                        quoteParser.echoQuoteProcessor("\"", params);
                     } else {
                         params = params.replaceAll("\\s+", " ");
                         System.out.println(params);
                     }
                     break;
                 case "cat":
-                    String[] files = params.split("'");
-                    for (int i = 1; i < files.length; i += 2) {
-                        String fileName = files[i];
-                        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-                            String line;
-                            while ((line = reader.readLine()) != null) {
-                                System.out.print(line);
-                            }
-                        }
+                    if (params.charAt(0) == '\'') {
+                        quoteParser.catQuoteProcessor("'", params);
+                    } else {
+                        quoteParser.catQuoteProcessor("\"", params);
                     }
-                    System.out.println();
                     break;
                 case "type":
                     if (builtInCommands.contains(params)) {
