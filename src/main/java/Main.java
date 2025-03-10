@@ -1,5 +1,6 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -50,7 +51,10 @@ public class Main {
                         System.out.println(params);
                     }
                     break;
-
+                case "cat":
+                    String[] dm = params.split("'");
+                    System.out.println(dm.length);
+                    break;
                 case "type":
                     if (builtInCommands.contains(params)) {
                         System.out.println(params + " is a shell builtin");
