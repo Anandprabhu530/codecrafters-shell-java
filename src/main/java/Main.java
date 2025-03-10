@@ -45,7 +45,7 @@ public class Main {
                     if (params.charAt(0) == '\'') {
                         System.out.println(params.substring(1, params.length() - 1));
                     } else {
-                        System.out.println(params.split(" ").length);
+                        params = params.replaceAll("\\s+", " ");
                         System.out.println(params);
                     }
                     break;
