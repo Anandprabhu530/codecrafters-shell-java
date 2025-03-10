@@ -60,10 +60,11 @@ public class Main {
                         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                             String line;
                             while ((line = reader.readLine()) != null) {
-                                System.out.println(line);
+                                System.out.print(line);
                             }
                         }
                     }
+                    System.out.println();
                     break;
                 case "type":
                     if (builtInCommands.contains(params)) {
