@@ -43,7 +43,8 @@ public class Main {
 
                 case "echo":
                     if (params.charAt(0) == '\'') {
-                        System.out.println(params.substring(1, params.length() - 1));
+                        params = params.replaceAll("'+", "");
+                        System.out.println(params);
                     } else {
                         params = params.replaceAll("\\s+", " ");
                         System.out.println(params);
