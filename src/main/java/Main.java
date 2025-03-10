@@ -53,6 +53,7 @@ public class Main {
                     break;
                 case "cat":
                     String[] dm = params.split("'");
+                    System.out.println(Arrays.toString(dm));
                     System.out.println(dm.length);
                     break;
                 case "type":
