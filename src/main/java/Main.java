@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -52,10 +54,16 @@ public class Main {
                     }
                     break;
                 case "cat":
-                    params = params.trim();
-                    String[] dm = params.split("'");
-                    System.out.println(Arrays.toString(dm));
-                    System.out.println(dm.length);
+                    String[] files = params.split("'");
+                    for (int i = 1; i < files.length; i += 2) {
+                        String fileName = files[i];
+                        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                System.out.print(line);
+                            }
+                        }
+                    }
                     break;
                 case "type":
                     if (builtInCommands.contains(params)) {
