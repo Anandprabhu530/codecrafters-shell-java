@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 
 public class QuoteParser {
     public void catQuoteProcessor(String splitChar, String params) throws Exception {
@@ -17,12 +18,13 @@ public class QuoteParser {
     }
 
     public void echoQuoteProcessor(String spliChar, String params) {
-        String[] dm = params.split(spliChar);
-        for (int i = 1; i < dm.length; i += 2) {
-            if (i == dm.length - 1 || i == dm.length - 2) {
-                System.out.print(dm[i]);
+        String[] content = params.split(spliChar);
+        System.out.println(Arrays.toString(content));
+        for (int i = 1; i < content.length; i += 2) {
+            if (content[i - 1].length() == 0) {
+                System.out.print(content[i]);
             } else {
-                System.out.print(dm[i] + " ");
+                System.out.print(" " + content[i]);
             }
         }
         System.out.println();
