@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -47,6 +46,9 @@ public class Main {
                 case "echo":
                     if (params.charAt(0) == '\'') {
                         params = params.replaceAll("'+", "");
+                        System.out.println(params);
+                    } else if (params.charAt(0) == '"') {
+                        params = params.replaceAll("\"+", "");
                         System.out.println(params);
                     } else {
                         params = params.replaceAll("\\s+", " ");
