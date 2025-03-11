@@ -29,16 +29,12 @@ public class QuoteParser {
                 index++;
                 continue;
             }
-            if (temp == '\\' && index < params.length() - 1
-                    && params.charAt(index + 1) == '\\') {
-                index++;
-                continue;
-            }
-            if (temp == '\\' && index < params.length() - 1 && params.charAt(index + 1) == '"') {
+            if (temp == '\\' && index < params.length() - 1) {
                 str.append(params.charAt(index + 1));
                 index += 2;
                 continue;
             }
+
             if (isOpen) {
                 str.append(temp);
                 index++;
