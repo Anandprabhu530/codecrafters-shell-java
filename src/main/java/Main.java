@@ -53,6 +53,7 @@ public class Main {
                         System.out.println();
                     }
                     break;
+
                 case "cat":
                     if (params.charAt(0) == '\'') {
                         quoteParser.catQuoteProcessor("'", params);
@@ -60,6 +61,7 @@ public class Main {
                         quoteParser.catQuoteProcessor("\"", params);
                     }
                     break;
+
                 case "type":
                     if (builtInCommands.contains(params)) {
                         System.out.println(params + " is a shell builtin");
@@ -71,6 +73,14 @@ public class Main {
                             System.out.println(params + ": not found");
                         }
                     }
+                    break;
+
+                case "'exe":
+
+                    break;
+
+                case "\"exe":
+
                     break;
 
                 default:
