@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 
 public class QuoteParser {
     public void catQuoteProcessor(String splitChar, String params) throws Exception {
@@ -69,6 +70,7 @@ public class QuoteParser {
     public void executionOfQuotedText(String splitString, String params) throws Exception {
         String[] temp = params.split(splitString);
         temp[temp.length - 1] = temp[temp.length - 1].trim();
+        System.out.println(Arrays.toString(temp));
         catQuoteProcessor("\"", temp[temp.length - 1]);
     }
 }
