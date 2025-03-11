@@ -30,6 +30,10 @@ public class QuoteParser {
                 continue;
             }
             if (temp == '\\' && index < params.length() - 1) {
+                if (params.charAt(0) == '\'') {
+                    str.append(params.charAt(index++));
+                    continue;
+                }
                 str.append(params.charAt(index + 1));
                 index += 2;
                 continue;
