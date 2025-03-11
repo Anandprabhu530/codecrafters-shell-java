@@ -1,5 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -7,10 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        HashSet<String> builtInCommands = new HashSet<>();
-        builtInCommands.add("echo");
-        builtInCommands.add("exit");
-        builtInCommands.add("type");
+        HashSet<String> builtInCommands = builtinCommandSet();
         QuoteParser quoteParser = new QuoteParser();
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -45,9 +40,9 @@ public class Main {
 
                 case "echo":
                     if (params.charAt(0) == '\'') {
-                        quoteParser.echoQuoteProcessor("'", params);
+                        quoteParser.echoQuoteProcessor('\'', params);
                     } else if (params.charAt(0) == '"') {
-                        quoteParser.echoQuoteProcessor("\"", params);
+                        quoteParser.echoQuoteProcessor('"', params);
                     } else {
                         params = params.replaceAll("\\s+", " ");
                         for (int i = 0; i < params.length(); i++) {
@@ -90,6 +85,14 @@ public class Main {
                     break;
             }
         }
+    }
+
+    private static HashSet<String> builtinCommandSet() {
+        HashSet<String> set = new HashSet<>();
+        set.add("echo");
+        set.add("exit");
+        set.add("type");
+        return set;
     }
 
     private static String getPath(String pathString) {
