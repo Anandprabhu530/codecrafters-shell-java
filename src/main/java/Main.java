@@ -50,7 +50,12 @@ public class Main {
                         quoteParser.echoQuoteProcessor("\"", params);
                     } else {
                         params = params.replaceAll("\\s+", " ");
-                        System.out.println(params);
+                        for (int i = 0; i < params.length(); i++) {
+                            if (params.charAt(i) == '\\')
+                                continue;
+                            System.out.print(params.charAt(i));
+                        }
+                        System.out.println();
                     }
                     break;
                 case "cat":
