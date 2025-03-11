@@ -70,6 +70,13 @@ public class QuoteParser {
     public void executionOfQuotedText(String splitString, String params) throws Exception {
         String[] temp = params.split(splitString);
         temp[temp.length - 1] = temp[temp.length - 1].trim();
-        catQuoteProcessor("\"", "/tmp/quz/f1");
+        // catQuoteProcessor("\"", "/tmp/quz/f1");
+        try (BufferedReader reader = new BufferedReader(new FileReader("/tmp/quz/f1"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.print(line);
+            }
+            System.out.println();
+        }
     }
 }
