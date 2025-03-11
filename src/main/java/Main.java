@@ -76,11 +76,11 @@ public class Main {
                     break;
 
                 case "'exe":
-
+                    quoteParser.executionOfQuotedText("'", input);
                     break;
 
                 case "\"exe":
-
+                    quoteParser.executionOfQuotedText("\"", input);
                     break;
 
                 default:
