@@ -37,12 +37,14 @@ public class Main {
                 String[] firstFile = redirect[0].split(" ");
                 // fileName in firstFile[firstFile.length-1].trim();
                 // secondFile in redirect[1].trim();
-                ProcessBuilder processBuilder = new ProcessBuilder();
+                // ProcessBuilder processBuilder = new ProcessBuilder();
                 File file = new File(redirect[1].trim());
                 if (!file.exists()) {
+                    file.getParentFile().mkdirs();
                     file.createNewFile();
                 }
                 if (params.startsWith("ls")) {
+                    System.out.println("Inside ls");
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
                     Process process = Runtime.getRuntime().exec(shellCommand);
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
