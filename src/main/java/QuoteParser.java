@@ -69,6 +69,7 @@ public class QuoteParser {
 
     public void executionOfQuotedText(String splitString, String params) throws Exception {
         String[] temp = params.split(splitString);
+
         try (BufferedReader reader = new BufferedReader(new FileReader(temp[temp.length - 1].trim()))) {
             String line;
             while ((line = reader.readLine()) != null) {

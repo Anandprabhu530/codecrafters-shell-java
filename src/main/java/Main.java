@@ -60,8 +60,6 @@ public class Main {
                         quoteParser.catQuoteProcessor("'", params);
                     } else if (params.charAt(0) == '"') {
                         quoteParser.catQuoteProcessor("\"", params);
-                    } else {
-                        quoteParser.executionOfQuotedText("--", params);
                     }
                     break;
 
