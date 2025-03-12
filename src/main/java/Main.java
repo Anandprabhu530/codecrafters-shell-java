@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         HashSet<String> builtInCommands = builtinCommandSet();
         QuoteParser quoteParser = new QuoteParser();
+        DirectoryNavigator directoryNavigator = new DirectoryNavigator();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("$ ");
@@ -81,6 +82,10 @@ public class Main {
 
                 case "\"exe":
                     quoteParser.executionOfQuotedText("\"", input);
+                    break;
+
+                case "ls":
+                    directoryNavigator.lsCommand(params);
                     break;
 
                 default:

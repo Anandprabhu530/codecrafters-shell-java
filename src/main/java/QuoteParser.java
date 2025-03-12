@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Arrays;
 
 public class QuoteParser {
     public void catQuoteProcessor(String splitChar, String params) throws Exception {
