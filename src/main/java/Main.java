@@ -30,7 +30,6 @@ public class Main {
             } else if (commands.length > 1) {
                 params += commands[1];
             }
-
             if (params.contains(">") || params.contains("1>")) {
                 String testString01 = "";
                 String testString02 = "";
@@ -54,7 +53,7 @@ public class Main {
                     }
                     System.out.println(output);
                 }
-                break;
+                continue;
             }
 
             switch (command) {
