@@ -3,19 +3,6 @@ import java.io.FileReader;
 import java.util.Arrays;
 
 public class QuoteParser {
-    public void catQuoteProcessor(String splitChar, String params) throws Exception {
-        String[] files = params.split(splitChar);
-        for (int i = 1; i < files.length; i += 2) {
-            String fileName = files[i];
-            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.print(line);
-                }
-            }
-        }
-        System.out.println();
-    }
 
     public void echoQuoteProcessor(char spliChar, String params) {
         StringBuilder str = new StringBuilder();
@@ -67,10 +54,8 @@ public class QuoteParser {
         // System.out.println();
     }
 
-    public void executionOfQuotedText(String splitString, String params) throws Exception {
-        String[] temp = params.split(splitString);
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(temp[temp.length - 1].trim()))) {
+    public void readFile(String fileName) throws Exception {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.print(line);
@@ -78,4 +63,5 @@ public class QuoteParser {
             System.out.println();
         }
     }
+
 }

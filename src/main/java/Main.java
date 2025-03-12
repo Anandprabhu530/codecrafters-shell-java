@@ -25,7 +25,6 @@ public class Main {
                         params += commands[i] + " ";
                     }
                 }
-
             } else if (commands.length > 1) {
                 params += commands[1];
             }
@@ -57,9 +56,16 @@ public class Main {
 
                 case "cat":
                     if (params.charAt(0) == '\'') {
-                        quoteParser.catQuoteProcessor("'", params);
+                        String[] files = params.split("'");
+                        for (int i = 1; i < files.length; i += 2) {
+                            quoteParser.readFile(files[i]);
+                        }
+
                     } else if (params.charAt(0) == '"') {
-                        quoteParser.catQuoteProcessor("\"", params);
+                        String[] files = params.split("\"");
+                        for (int i = 1; i < files.length; i += 2) {
+                            quoteParser.readFile(files[i]);
+                        }
                     }
                     break;
 
@@ -77,15 +83,13 @@ public class Main {
                     break;
 
                 case "'exe":
-                    quoteParser.executionOfQuotedText("'", input);
+                    String[] temp = params.split("'");
+                    quoteParser.readFile(temp[temp.length - 1].trim());
                     break;
 
                 case "\"exe":
-                    quoteParser.executionOfQuotedText("\"", input);
-                    break;
-
-                case "ls":
-                    directoryNavigator.lsCommand(params);
+                    String[] fileName = params.split("\"");
+                    quoteParser.readFile(fileName[fileName.length - 1].trim());
                     break;
 
                 default:
