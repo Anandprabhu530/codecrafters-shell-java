@@ -58,8 +58,10 @@ public class Main {
                 case "cat":
                     if (params.charAt(0) == '\'') {
                         quoteParser.catQuoteProcessor("'", params);
-                    } else {
+                    } else if (params.charAt(0) == '"') {
                         quoteParser.catQuoteProcessor("\"", params);
+                    } else {
+                        quoteParser.executionOfQuotedText("", params);
                     }
                     break;
 
