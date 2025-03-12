@@ -61,7 +61,7 @@ public class Main {
                     } else if (params.charAt(0) == '"') {
                         quoteParser.catQuoteProcessor("\"", params);
                     } else {
-                        quoteParser.executionOfQuotedText("", params);
+                        quoteParser.executionOfQuotedText("--", params);
                     }
                     break;
 
