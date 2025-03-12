@@ -1,3 +1,7 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -7,13 +11,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
         HashSet<String> builtInCommands = builtinCommandSet();
         QuoteParser quoteParser = new QuoteParser();
-        DirectoryNavigator directoryNavigator = new DirectoryNavigator();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("$ ");
             String input = scanner.nextLine();
             String[] commands = input.split(" ");
-
             String command = commands[0];
             String params = "";
 
@@ -27,6 +29,32 @@ public class Main {
                 }
             } else if (commands.length > 1) {
                 params += commands[1];
+            }
+
+            if (params.contains(">") || params.contains("1>")) {
+                String testString01 = "";
+                String testString02 = "";
+                String[] redirect = params.split(">");
+                String[] firstFile = redirect[0].split(" ");
+                // fileName in firstFile[firstFile.length-1].trim();
+                // secondFile in redirect[1].trim();
+                ProcessBuilder processBuilder = new ProcessBuilder();
+                File file = new File(redirect[1].trim());
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                if (params.startsWith("ls")) {
+                    String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
+                    Process process = Runtime.getRuntime().exec(shellCommand);
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = bufferedReader.readLine()) != null) {
+                        output.append(line).append("\n");
+                    }
+                    System.out.println(output);
+                }
+                break;
             }
 
             switch (command) {
