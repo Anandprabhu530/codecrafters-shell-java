@@ -43,8 +43,7 @@ public class Main {
                     file.getParentFile().mkdirs();
                     file.createNewFile();
                 }
-                if (params.startsWith("ls")) {
-                    System.out.println("Inside ls");
+                if (command.equals("ls")) {
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
                     Process process = Runtime.getRuntime().exec(shellCommand);
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -53,7 +52,6 @@ public class Main {
                     while ((line = bufferedReader.readLine()) != null) {
                         output.append(line).append("\n");
                     }
-                    System.out.println(output);
                 }
                 continue;
             }
