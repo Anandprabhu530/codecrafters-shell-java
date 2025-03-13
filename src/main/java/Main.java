@@ -1,11 +1,14 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -30,29 +33,51 @@ public class Main {
             } else if (commands.length > 1) {
                 params += commands[1];
             }
+
             if (params.contains(">") || params.contains("1>")) {
-                String testString01 = "";
-                String testString02 = "";
-                String[] redirect = params.split(">");
+                String[] redirect = params.split("1?>");
                 String[] firstFile = redirect[0].split(" ");
-                // fileName in firstFile[firstFile.length-1].trim();
-                // secondFile in redirect[1].trim();
-                // ProcessBuilder processBuilder = new ProcessBuilder();
                 File file = new File(redirect[1].trim());
+                StringBuilder output = new StringBuilder();
+
                 if (!file.exists()) {
                     file.getParentFile().mkdirs();
                     file.createNewFile();
                 }
-                if (command.equals("ls")) {
+                if (command.equals("echo")) {
+                    String temp = redirect[0].trim();
+                    output.append(temp.substring(1, temp.length() - 1));
+                } else if (command.equals("ls")) {
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
                     Process process = Runtime.getRuntime().exec(shellCommand);
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     String line;
-                    StringBuilder output = new StringBuilder();
                     while ((line = bufferedReader.readLine()) != null) {
                         output.append(line).append("\n");
                     }
+                } else if (command.equals("cat")) {
+                    for (int i = 0; i < firstFile.length; i++) {
+                        if (firstFile[i].trim().equals("nonexistent")) {
+                            System.out.println(command + ": " + firstFile[i] + ": No such file or directory");
+                            continue;
+                        }
+                        String[] shellCommand = { "cat", firstFile[i].trim() };
+                        Process process = Runtime.getRuntime().exec(shellCommand);
+                        BufferedReader bufferedReader = new BufferedReader(
+                                new InputStreamReader(process.getInputStream()));
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            output.append(line).append("\n");
+                        }
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                        writer.write(output.toString());
+                        writer.close();
+                    }
                 }
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write(output.toString());
+                writer.close();
                 continue;
             }
 
@@ -85,14 +110,18 @@ public class Main {
                     if (params.charAt(0) == '\'') {
                         String[] files = params.split("'");
                         for (int i = 1; i < files.length; i += 2) {
-                            quoteParser.readFile(files[i]);
+                            quoteParser.readFile(files[i], true);
                         }
+                        System.out.println();
 
                     } else if (params.charAt(0) == '"') {
                         String[] files = params.split("\"");
                         for (int i = 1; i < files.length; i += 2) {
-                            quoteParser.readFile(files[i]);
+                            quoteParser.readFile(files[i], true);
                         }
+                        System.out.println();
+                    } else {
+                        quoteParser.readFile(params, false);
                     }
                     break;
 
@@ -111,12 +140,12 @@ public class Main {
 
                 case "'exe":
                     String[] temp = params.split("'");
-                    quoteParser.readFile(temp[temp.length - 1].trim());
+                    quoteParser.readFile(temp[temp.length - 1].trim(), false);
                     break;
 
                 case "\"exe":
                     String[] fileName = params.split("\"");
-                    quoteParser.readFile(fileName[fileName.length - 1].trim());
+                    quoteParser.readFile(fileName[fileName.length - 1].trim(), false);
                     break;
 
                 default:

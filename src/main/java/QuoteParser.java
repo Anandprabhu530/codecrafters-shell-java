@@ -54,14 +54,19 @@ public class QuoteParser {
         // System.out.println();
     }
 
-    public void readFile(String fileName) throws Exception {
+    public void readFile(String fileName, boolean isContinuous) throws Exception {
+
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.print(line);
+                if (isContinuous) {
+                    System.out.print(line);
+                } else {
+                    System.out.println(line);
+                }
             }
-            System.out.println();
         }
+
     }
 
 }
