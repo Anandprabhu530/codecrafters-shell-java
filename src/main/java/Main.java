@@ -80,6 +80,52 @@ public class Main {
                 continue;
             }
 
+            if (params.contains(">>") || params.contains("1>>")) {
+                String[] redirect = params.split("1?>>");
+                String[] firstFile = redirect[0].split(" ");
+                File file = new File(redirect[1].trim());
+                StringBuilder output = new StringBuilder();
+
+                if (!file.exists()) {
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                }
+                if (command.equals("echo")) {
+                    String temp = redirect[0].trim();
+                    output.append(temp.substring(1, temp.length() - 1));
+                } else if (command.equals("ls")) {
+                    String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
+                    Process process = Runtime.getRuntime().exec(shellCommand);
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        output.append(line).append("\n");
+                    }
+                } else if (command.equals("cat")) {
+                    for (int i = 0; i < firstFile.length; i++) {
+                        if (firstFile[i].trim().equals("nonexistent")) {
+                            System.out.println(command + ": " + firstFile[i] + ": No such file or directory");
+                            continue;
+                        }
+                        String[] shellCommand = { "cat", firstFile[i].trim() };
+                        Process process = Runtime.getRuntime().exec(shellCommand);
+                        BufferedReader bufferedReader = new BufferedReader(
+                                new InputStreamReader(process.getInputStream()));
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            output.append(line).append("\n");
+                        }
+                    }
+                }
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+                if (file.length() > 0)
+                    writer.write("\n");
+                writer.write(output.toString());
+                writer.close();
+                continue;
+            }
+
             if (params.contains(">") || params.contains("1>")) {
                 String[] redirect = params.split("1?>");
                 String[] firstFile = redirect[0].split(" ");
