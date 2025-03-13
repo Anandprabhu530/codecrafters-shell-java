@@ -36,6 +36,51 @@ public class Main {
                 params += commands[1];
             }
 
+            if (params.contains("2>>")) {
+                String[] redirect = params.split("2>>");
+                String[] inputFileArray = redirect[0].trim().split(" ");
+                File Inputfile = new File(inputFileArray[inputFileArray.length - 1].trim());
+                File file = new File(redirect[1].trim());
+                StringBuilder output = new StringBuilder();
+
+                if (!file.exists()) {
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                }
+
+                if (command.equals("echo")) {
+                    String temp = redirect[0].trim();
+                    System.out.println(temp.substring(1, temp.length() - 1));
+                    continue;
+
+                } else if (command.equals("ls")) {
+                    if (!Inputfile.exists()) {
+                        output.append(
+                                command + ": nonexistent: No such file or directory");
+                    }
+                } else if (command.equals("cat")) {
+                    String[] files = redirect[0].trim().split(" ");
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].trim().equals("nonexistent")) {
+                            output.delete(0, output.length());
+                            output.append(command + ": " + files[i] + ": No such file or directory");
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+                            if (file.length() > 0)
+                                writer.write(output.toString());
+                            writer.close();
+                            continue;
+                        }
+                    }
+                }
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+                if (file.length() > 0)
+                    writer.write("\n");
+                writer.write(output.toString());
+                writer.close();
+                continue;
+            }
+
             if (params.contains("2>")) {
                 String[] redirect = params.split("2>");
                 File Inputfile = new File(redirect[0].trim());
@@ -94,6 +139,11 @@ public class Main {
                     String temp = redirect[0].trim();
                     output.append(temp.substring(1, temp.length() - 1));
                 } else if (command.equals("ls")) {
+                    File inputFile = new File(firstFile[firstFile.length - 1].trim());
+                    if (!inputFile.exists()) {
+                        System.out.println(command + ": nonexistent: No such file or directory");
+                        continue;
+                    }
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
                     Process process = Runtime.getRuntime().exec(shellCommand);
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
