@@ -269,7 +269,17 @@ public class Main {
                     break;
 
                 case "pwd":
-                    System.out.println(Paths.get("").toAbsolutePath().toString());
+                    System.out.println(System.getProperty("user.dir"));
+                    break;
+
+                case "cd":
+                    String checkIfPathExists = params.trim();
+                    File checkIfExists = new File(checkIfPathExists);
+                    if (checkIfExists.exists()) {
+                        System.setProperty("user.dir", checkIfPathExists);
+                    } else {
+                        System.out.println(command + ": " + checkIfPathExists + ": No such file or directory");
+                    }
                     break;
 
                 case "type":
