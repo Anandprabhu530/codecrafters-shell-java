@@ -8,7 +8,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -32,6 +34,50 @@ public class Main {
                 }
             } else if (commands.length > 1) {
                 params += commands[1];
+            }
+
+            if (params.contains("2>")) {
+                String[] redirect = params.split("2>");
+                File Inputfile = new File(redirect[0].trim());
+                File file = new File(redirect[1].trim());
+                StringBuilder output = new StringBuilder();
+
+                if (!file.exists()) {
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                }
+
+                if (command.equals("echo")) {
+                    String temp = redirect[0].trim();
+                    // output.append(temp.substring(1, temp.length() - 1));
+                    System.out.println(temp.substring(1, temp.length() - 1));
+                    output.delete(0, output.length());
+
+                } else if (command.equals("ls")) {
+                    if (!Inputfile.exists()) {
+                        output.append(
+                                command + ": nonexistent: No such file or directory");
+                    }
+                } else if (command.equals("cat")) {
+                    String[] files = redirect[0].split(" ");
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].trim().equals("nonexistent")) {
+                            output.delete(0, output.length());
+                            output.append(command + ": " + files[i] + ": No such file or directory");
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                            writer.write(output.toString());
+                            writer.close();
+                            continue;
+                        } else {
+                            quoteParser.readFile(files[i], false);
+                        }
+                    }
+                }
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write(output.toString());
+                writer.close();
+                continue;
             }
 
             if (params.contains(">") || params.contains("1>")) {
