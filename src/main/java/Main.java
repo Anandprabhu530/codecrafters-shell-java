@@ -55,8 +55,7 @@ public class Main {
 
                 } else if (command.equals("ls")) {
                     if (!Inputfile.exists()) {
-                        output.append(
-                                command + ": nonexistent: No such file or directory");
+                        output.append(command + ": nonexistent: No such file or directory");
                     }
                 } else if (command.equals("cat")) {
                     String[] files = redirect[0].trim().split(" ");
@@ -64,11 +63,15 @@ public class Main {
                         if (files[i].trim().equals("nonexistent")) {
                             output.delete(0, output.length());
                             output.append(command + ": " + files[i] + ": No such file or directory");
-                            writeToFile(file, output, true);
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+                            if (file.length() > 0)
+                                writer.write(output.toString());
+                            writer.close();
                             continue;
                         }
                     }
                 }
+
                 writeToFile(file, output, true);
                 continue;
             }
@@ -127,14 +130,14 @@ public class Main {
                         continue;
                     }
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
-                    readfromFile(shellCommand, output);
+                    readFromFile(shellCommand, output);
                 } else if (command.equals("cat")) {
                     for (int i = 0; i < firstFile.length; i++) {
-                        if (checkError(command, firstFile[i])) {
+                        if (ifFileExists(firstFile[i], command)) {
                             continue;
                         }
                         String[] shellCommand = { "cat", firstFile[i].trim() };
-                        readfromFile(shellCommand, output);
+                        readFromFile(shellCommand, output);
                     }
                 }
 
@@ -155,17 +158,18 @@ public class Main {
                     output.append(temp.substring(1, temp.length() - 1));
                 } else if (command.equals("ls")) {
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
-                    readfromFile(shellCommand, output);
+                    readFromFile(shellCommand, output);
                 } else if (command.equals("cat")) {
                     for (int i = 0; i < firstFile.length; i++) {
-                        if (checkError(command, firstFile[i])) {
+                        if (ifFileExists(firstFile[i], command)) {
                             continue;
                         }
                         String[] shellCommand = { "cat", firstFile[i].trim() };
-                        readfromFile(shellCommand, output);
+                        readFromFile(shellCommand, output);
                         writeToFile(file, output, false);
                     }
                 }
+
                 writeToFile(file, output, false);
                 continue;
             }
@@ -300,25 +304,25 @@ public class Main {
         }
     }
 
-    private static void readfromFile(String[] shellCommand, StringBuilder output) throws IOException {
+    private static void writeToFile(File file, StringBuilder output, boolean toAppend) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file, toAppend));
+        if (toAppend && file.length() > 0)
+            writer.write("\n");
+        writer.write(output.toString());
+        writer.close();
+    }
+
+    private static void readFromFile(String[] shellCommand, StringBuilder output) throws IOException {
         Process process = Runtime.getRuntime().exec(shellCommand);
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             output.append(line).append("\n");
         }
     }
 
-    private static void writeToFile(File file, StringBuilder output, boolean toAppend) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file, toAppend));
-        if (toAppend && file.length() > 0) {
-            writer.write("\n");
-        }
-        writer.write(output.toString());
-        writer.close();
-    }
-
-    private static boolean checkError(String command, String firstFile) {
+    private static boolean ifFileExists(String firstFile, String command) {
         if (firstFile.trim().equals("nonexistent")) {
             System.out.println(command + ": " + firstFile + ": No such file or directory");
             return true;
