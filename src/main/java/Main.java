@@ -236,6 +236,8 @@ public class Main {
                         }
                     } else if (changeFile.exists()) {
                         dir = changeFile;
+                    } else if (params.trim().equals("~")) {
+                        dir = new File(System.getenv("HOME"));
                     } else {
                         System.out.println(command + ": " + changeFile + ": No such file or directory");
                     }
