@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -18,6 +19,7 @@ public class Main {
         HashSet<String> builtInCommands = builtinCommandSet();
         QuoteParser quoteParser = new QuoteParser();
         Scanner scanner = new Scanner(System.in);
+        File dir = new File(System.getProperty("user.dir"));
         while (true) {
             System.out.print("$ ");
             String input = scanner.nextLine();
@@ -44,10 +46,7 @@ public class Main {
                 File file = new File(redirect[1].trim());
                 StringBuilder output = new StringBuilder();
 
-                if (!file.exists()) {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                }
+                createFileIfnotExists(file);
 
                 if (command.equals("echo")) {
                     String temp = redirect[0].trim();
@@ -65,20 +64,12 @@ public class Main {
                         if (files[i].trim().equals("nonexistent")) {
                             output.delete(0, output.length());
                             output.append(command + ": " + files[i] + ": No such file or directory");
-                            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                            if (file.length() > 0)
-                                writer.write(output.toString());
-                            writer.close();
+                            writeToFile(file, output, true);
                             continue;
                         }
                     }
                 }
-
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                if (file.length() > 0)
-                    writer.write("\n");
-                writer.write(output.toString());
-                writer.close();
+                writeToFile(file, output, true);
                 continue;
             }
 
@@ -88,14 +79,10 @@ public class Main {
                 File file = new File(redirect[1].trim());
                 StringBuilder output = new StringBuilder();
 
-                if (!file.exists()) {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                }
+                createFileIfnotExists(file);
 
                 if (command.equals("echo")) {
                     String temp = redirect[0].trim();
-                    // output.append(temp.substring(1, temp.length() - 1));
                     System.out.println(temp.substring(1, temp.length() - 1));
                     output.delete(0, output.length());
 
@@ -110,9 +97,7 @@ public class Main {
                         if (files[i].trim().equals("nonexistent")) {
                             output.delete(0, output.length());
                             output.append(command + ": " + files[i] + ": No such file or directory");
-                            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                            writer.write(output.toString());
-                            writer.close();
+                            writeToFile(file, output, false);
                             continue;
                         } else {
                             quoteParser.readFile(files[i], false);
@@ -120,9 +105,7 @@ public class Main {
                     }
                 }
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                writer.write(output.toString());
-                writer.close();
+                writeToFile(file, output, false);
                 continue;
             }
 
@@ -132,10 +115,8 @@ public class Main {
                 File file = new File(redirect[1].trim());
                 StringBuilder output = new StringBuilder();
 
-                if (!file.exists()) {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                }
+                createFileIfnotExists(file);
+
                 if (command.equals("echo")) {
                     String temp = redirect[0].trim();
                     output.append(temp.substring(1, temp.length() - 1));
@@ -146,34 +127,18 @@ public class Main {
                         continue;
                     }
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
-                    Process process = Runtime.getRuntime().exec(shellCommand);
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        output.append(line).append("\n");
-                    }
+                    readfromFile(shellCommand, output);
                 } else if (command.equals("cat")) {
                     for (int i = 0; i < firstFile.length; i++) {
-                        if (firstFile[i].trim().equals("nonexistent")) {
-                            System.out.println(command + ": " + firstFile[i] + ": No such file or directory");
+                        if (checkError(command, firstFile[i])) {
                             continue;
                         }
                         String[] shellCommand = { "cat", firstFile[i].trim() };
-                        Process process = Runtime.getRuntime().exec(shellCommand);
-                        BufferedReader bufferedReader = new BufferedReader(
-                                new InputStreamReader(process.getInputStream()));
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            output.append(line).append("\n");
-                        }
+                        readfromFile(shellCommand, output);
                     }
                 }
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                if (file.length() > 0)
-                    writer.write("\n");
-                writer.write(output.toString());
-                writer.close();
+                writeToFile(file, output, true);
                 continue;
             }
 
@@ -183,44 +148,25 @@ public class Main {
                 File file = new File(redirect[1].trim());
                 StringBuilder output = new StringBuilder();
 
-                if (!file.exists()) {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                }
+                createFileIfnotExists(file);
+
                 if (command.equals("echo")) {
                     String temp = redirect[0].trim();
                     output.append(temp.substring(1, temp.length() - 1));
                 } else if (command.equals("ls")) {
                     String[] shellCommand = { "ls", firstFile[firstFile.length - 1].trim() };
-                    Process process = Runtime.getRuntime().exec(shellCommand);
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        output.append(line).append("\n");
-                    }
+                    readfromFile(shellCommand, output);
                 } else if (command.equals("cat")) {
                     for (int i = 0; i < firstFile.length; i++) {
-                        if (firstFile[i].trim().equals("nonexistent")) {
-                            System.out.println(command + ": " + firstFile[i] + ": No such file or directory");
+                        if (checkError(command, firstFile[i])) {
                             continue;
                         }
                         String[] shellCommand = { "cat", firstFile[i].trim() };
-                        Process process = Runtime.getRuntime().exec(shellCommand);
-                        BufferedReader bufferedReader = new BufferedReader(
-                                new InputStreamReader(process.getInputStream()));
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            output.append(line).append("\n");
-                        }
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                        writer.write(output.toString());
-                        writer.close();
+                        readfromFile(shellCommand, output);
+                        writeToFile(file, output, false);
                     }
                 }
-
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                writer.write(output.toString());
-                writer.close();
+                writeToFile(file, output, false);
                 continue;
             }
 
@@ -269,16 +215,25 @@ public class Main {
                     break;
 
                 case "pwd":
-                    System.out.println(System.getProperty("user.dir"));
+                    System.out.println(dir.getAbsolutePath().toString());
                     break;
 
                 case "cd":
-                    String checkIfPathExists = params.trim();
-                    File checkIfExists = new File(checkIfPathExists);
-                    if (checkIfExists.exists()) {
-                        System.setProperty("user.dir", checkIfPathExists);
+                    String filePath = params.trim();
+                    File changeFile = new File(filePath);
+                    File newFile = new File(dir, filePath);
+                    newFile = new File(newFile.getCanonicalPath());
+                    if (params.contains("./") || params.contains("../")) {
+                        if (newFile.exists()) {
+                            dir = newFile;
+                        } else {
+                            System.out.println(command + ": " + changeFile + ": No such file or directory");
+                            break;
+                        }
+                    } else if (changeFile.exists()) {
+                        dir = changeFile;
                     } else {
-                        System.out.println(command + ": " + checkIfPathExists + ": No such file or directory");
+                        System.out.println(command + ": " + changeFile + ": No such file or directory");
                     }
                     break;
 
@@ -336,5 +291,38 @@ public class Main {
             }
         }
         return null;
+    }
+
+    private static void createFileIfnotExists(File file) throws IOException {
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+    }
+
+    private static void readfromFile(String[] shellCommand, StringBuilder output) throws IOException {
+        Process process = Runtime.getRuntime().exec(shellCommand);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            output.append(line).append("\n");
+        }
+    }
+
+    private static void writeToFile(File file, StringBuilder output, boolean toAppend) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file, toAppend));
+        if (toAppend && file.length() > 0) {
+            writer.write("\n");
+        }
+        writer.write(output.toString());
+        writer.close();
+    }
+
+    private static boolean checkError(String command, String firstFile) {
+        if (firstFile.trim().equals("nonexistent")) {
+            System.out.println(command + ": " + firstFile + ": No such file or directory");
+            return true;
+        }
+        return false;
     }
 }
